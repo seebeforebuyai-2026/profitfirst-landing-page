@@ -1,929 +1,2761 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Profit First Analytics</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profit First Analytics</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: #000000;
-      color: #ffffff;
-    }
-
-    /* Header/Navigation */
-    .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: rgba(0, 0, 0, 0.9);
-      backdrop-filter: blur(10px);
-      padding: 16px 24px;
-      z-index: 1000;
-      border-bottom: none;
-    }
-
-    .header-content {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      height: 32px;
-      width: auto;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 32px;
-      align-items: center;
-    }
-
-    .nav-links a {
-      color: #ffffff;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
-
-    .nav-links a:hover {
-      color: #13ef96;
-    }
-
-    /* Mobile Menu */
-    .mobile-menu-toggle {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-      padding: 5px;
-      z-index: 1001;
-    }
-
-    .mobile-menu-toggle span {
-      width: 25px;
-      height: 3px;
-      background-color: #ffffff;
-      margin: 3px 0;
-      transition: all 0.3s ease;
-      border-radius: 2px;
-    }
-
-    .mobile-menu-toggle.active span:nth-child(1) {
-      transform: rotate(45deg) translate(8px, 8px);
-    }
-
-    .mobile-menu-toggle.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .mobile-menu-toggle.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(8px, -8px);
-    }
-
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 60px;
-      left: 0;
-      right: 0;
-      background: rgba(0, 0, 0, 0.98);
-      backdrop-filter: blur(10px);
-      padding: 20px;
-      z-index: 999;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .mobile-menu.active {
-      display: block;
-    }
-
-    .mobile-menu a {
-      display: block;
-      color: #ffffff;
-      text-decoration: none;
-      padding: 15px 20px;
-      font-weight: 500;
-      font-size: 18px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.3s ease;
-    }
-
-    .mobile-menu a:last-child {
-      border-bottom: none;
-    }
-
-    .mobile-menu a:hover {
-      color: #13ef96;
-      padding-left: 30px;
-    }
-
-    .mobile-menu .btn {
-      margin-top: 10px;
-      text-align: center;
-      display: block;
-      border-bottom: none;
-    }
-
-    .container {
-      max-width: 1280px;
-      margin: auto;
-      padding: 15px 24px;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Typography */
-    h1 {
-      font-size: 48px;
-      line-height: 1.2;
-      margin-bottom: 20px;
-      font-weight: 700;
-    }
-
-    h2 {
-      font-size: 30px;
-      margin-bottom: 20px;
-      font-weight: 700;
-      text-align: center;
-    }
-
-    h3 {
-      font-size: 20px;
-      margin-bottom: 12px;
-      font-weight: 600;
-    }
-
-    p {
-      font-size: 18px;
-      color: rgba(255, 255, 255, 0.8);
-      line-height: 1.7;
-    }
-
-    /* Gradient Text */
-    .gradient-text {
-      background: linear-gradient(to right, rgb(29, 164, 24), rgb(206, 220, 93));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      font-weight: 700;
-    }
-
-    /* Badge */
-    .badge {
-      color: #13ef96;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-      display: inline-block;
-      font-size: 14px;
-    }
-
-    /* Buttons */
-    .btn {
-      background: #13ef96;
-      color: #000000;
-      padding: 12px 24px;
-      font-weight: 600;
-      border-radius: 6px;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 28px;
-      transition: all 0.3s ease;
-      border: 2px solid #16a34a;
-    }
-
-    .btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px #13e691;
-    }
-
-    /* Sections */
-    .section-light {
-      background: transparent;
-    }
-
-    .hero-section {
-      position: relative;
-      padding-top: 100px;
-      padding-bottom: 40px;
-      min-height: auto;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    /* Ensure all sections have consistent padding */
-    section {
-      padding-top: 20px;
-      padding-bottom: 20px;
-    }
-
-    .hero-section {
-      padding-top: 100px;
-      padding-bottom: 20px;
-    }
-
-    /* Blur Effects */
-    .blur-circle-top {
-      position: absolute;
-      top: 100px;
-      right: -100px;
-      width: 250px;
-      height: 250px;
-      border-radius: 50%;
-      background: linear-gradient(to right, rgb(29, 164, 24), rgb(206, 220, 93));
-      opacity: 0.3;
-      filter: blur(100px);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* Ensure content is above blur effects */
-    .container {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Grid Layouts */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 30px;
-      margin-top: 30px;
-    }
-
-    /* Cards */
-    .card {
-      background: #161616;
-      padding: 24px;
-      border-radius: 12px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .card:hover {
-      box-shadow: 0 8px 16px rgba(19, 239, 150, 0.2);
-      transform: translateY(-4px);
-    }
-
-    /* Media */
-    img, video {
-      width: 100%;
-      border-radius: 12px;
-    }
-
-    svg {
-      width: 100%;
-      height: auto;
-    }
-
-    /* FAQ */
-    details {
-      background: #161616;
-      padding: 20px;
-      border-radius: 20px;
-      margin-bottom: 14px;
-      cursor: pointer;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.3s ease;
-      max-width: 100%;
-      display: block;
-    }
-
-    details:hover {
-      border-color: #13ef96;
-    }
-
-    details[open] {
-      border-color: #13ef96;
-    }
-
-    summary {
-      font-size: 18px;
-      font-weight: 600;
-      list-style: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      text-align: left;
-      width: 100%;
-    }
-
-    summary::-webkit-details-marker {
-      display: none;
-    }
-
-    summary::after {
-      content: '+';
-      font-size: 24px;
-      color: #13ef96;
-      transition: transform 0.3s ease;
-    }
-
-    details[open] summary::after {
-      transform: rotate(45deg);
-    }
-
-    details p {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      text-align: left;
-    }
-
-    .faq-wrapper {
-      max-width: 60%;
-      margin: 0 auto;
-    }
-
-    /* Responsive */
-    @media (min-width: 1366px) {
-      h1 {
-        font-size: 56px;
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
 
-      h2 {
-        font-size: 36px;
+      html {
+        scroll-behavior: smooth;
       }
 
-      p {
-        font-size: 20px;
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        background: #000000;
+        color: #ffffff;
       }
 
-      .container {
-        max-width: 1400px;
-        padding: 60px 40px;
+      /* Header/Navigation */
+      .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(10px);
+        padding: 16px 24px;
+        z-index: 1000;
+        border-bottom: none;
       }
 
-      .hero-section {
-        padding-top: 120px;
-        padding-bottom: 120px;
+      .header-content {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
 
-      .card {
-        padding: 36px;
+      .logo {
+        height: 32px;
+        width: auto;
       }
 
-      .btn {
-        padding: 14px 28px;
-        font-size: 16px;
+      .nav-links {
+        display: flex;
+        gap: 32px;
+        align-items: center;
       }
 
-      .badge {
-        font-size: 16px;
+      .nav-links a {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
       }
 
-      svg {
-        max-width: 850px !important;
-      }
-    }
-
-    @media (min-width: 1200px) and (max-width: 1365px) {
-      h1 {
-        font-size: 52px;
+      .nav-links a:hover {
+        color: #13ef96;
       }
 
-      h2 {
-        font-size: 34px;
+      /* Mobile Menu */
+      .mobile-menu-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        padding: 5px;
+        z-index: 1001;
       }
 
-      p {
-        font-size: 19px;
+      .mobile-menu-toggle span {
+        width: 25px;
+        height: 3px;
+        background-color: #ffffff;
+        margin: 3px 0;
+        transition: all 0.3s ease;
+        border-radius: 2px;
       }
 
-      .container {
-        max-width: 1300px;
-        padding: 55px 35px;
+      .mobile-menu-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(8px, 8px);
       }
 
-      .hero-section {
-        padding-top: 110px;
-        padding-bottom: 110px;
+      .mobile-menu-toggle.active span:nth-child(2) {
+        opacity: 0;
       }
 
-      .card {
-        padding: 32px;
+      .mobile-menu-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(8px, -8px);
       }
 
-      .btn {
-        padding: 13px 26px;
-        font-size: 15px;
+      .mobile-menu {
+        display: none;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.98);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        z-index: 999;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
 
-      .badge {
-        font-size: 15px;
+      .mobile-menu.active {
+        display: block;
       }
 
-      svg {
-        max-width: 850px !important;
+      .mobile-menu a {
+        display: block;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 15px 20px;
+        font-weight: 500;
+        font-size: 18px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
       }
-    }
 
-    @media (max-width: 768px) {
-      .grid-2, .grid-3 {
-        grid-template-columns: 1fr;
-        gap: 30px;
+      .mobile-menu a:last-child {
+        border-bottom: none;
       }
 
-      h1 {
-        font-size: 26px;
+      .mobile-menu a:hover {
+        color: #13ef96;
+        padding-left: 30px;
+      }
+
+      .mobile-menu .btn {
+        margin-top: 10px;
         text-align: center;
-        line-height: 1.3;
+        display: block;
+        border-bottom: none;
+      }
+
+      .container {
+        max-width: 1280px;
+        margin: auto;
+        padding: 15px 24px;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Typography */
+      h1 {
+        font-size: 48px;
+        line-height: 1.2;
+        margin-bottom: 20px;
+        font-weight: 700;
       }
 
       h2 {
         font-size: 30px;
+        margin-bottom: 20px;
+        font-weight: 700;
         text-align: center;
-      }
-
-      p {
-        font-size: 16px;
-      }
-
-      .container {
-        padding: 15px 16px;
-      }
-
-      section {
-        padding-top: 30px;
-        padding-bottom: 30px;
-      }
-
-      .hero-section {
-        padding-top: 80px;
-        padding-bottom: 30px;
-        min-height: auto;
-      }
-
-      .hero-section .container {
-        text-align: center;
-      }
-
-      .hero-section .container > div:first-child {
-        text-align: center;
-      }
-
-      .hero-section .container > div:first-child > div {
-        justify-content: center !important;
-        margin-top: 20px;
-      }
-
-      .hero-section .container > div:first-child > div > div {
-        flex-wrap: nowrap;
-      }
-
-      .btn {
-        padding: 10px 16px;
-        font-size: 16px;
-      }
-
-      .badge {
-        font-size: 12px;
-        justify-content: center;
-        display: flex;
-      }
-
-      .nav-links {
-        display: none;
-      }
-
-      .mobile-menu-toggle {
-        display: flex;
-      }
-
-      .blur-circle-top {
-        width: 200px;
-        height: 200px;
-      }
-
-      .card {
-        padding: 20px;
-      }
-
-      .header {
-        padding: 12px 16px;
-      }
-
-      .logo {
-        height: 28px;
       }
 
       h3 {
+        font-size: 20px;
+        margin-bottom: 12px;
+        font-weight: 600;
+      }
+
+      p {
         font-size: 18px;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.7;
+      }
+
+      /* Gradient Text */
+      .gradient-text {
+        background: linear-gradient(
+          to right,
+          rgb(29, 164, 24),
+          rgb(206, 220, 93)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 700;
+      }
+
+      /* Badge */
+      .badge {
+        color: #13ef96;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+        display: inline-block;
+        font-size: 14px;
+      }
+
+      /* Buttons */
+      .btn {
+        background: #13ef96;
+        color: #000000;
+        padding: 12px 24px;
+        font-weight: 600;
+        border-radius: 6px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 28px;
+        transition: all 0.3s ease;
+        border: 2px solid #16a34a;
+      }
+
+      .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px #13e691;
+      }
+
+      /* Sections */
+      .section-light {
+        background: transparent;
+      }
+
+      .hero-section {
+        position: relative;
+        padding-top: 100px;
+        padding-bottom: 40px;
+        min-height: auto;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      /* Ensure all sections have consistent padding */
+      section {
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+
+      .hero-section {
+        padding-top: 100px;
+        padding-bottom: 20px;
+      }
+
+      /* Blur Effects */
+      .blur-circle-top {
+        position: absolute;
+        top: 100px;
+        right: -100px;
+        width: 250px;
+        height: 250px;
+        border-radius: 50%;
+        background: linear-gradient(
+          to right,
+          rgb(29, 164, 24),
+          rgb(206, 220, 93)
+        );
+        opacity: 0.3;
+        filter: blur(100px);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* Ensure content is above blur effects */
+      .container {
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Grid Layouts */
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-top: 30px;
+      }
+
+      /* Cards */
+      .card {
+        background: #161616;
+        padding: 24px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .card:hover {
+        box-shadow: 0 8px 16px rgba(19, 239, 150, 0.2);
+        transform: translateY(-4px);
+      }
+
+      /* Media */
+      img,
+      video {
+        width: 100%;
+        border-radius: 12px;
       }
 
       svg {
-        max-width: 100% !important;
-        height: auto !important;
-        margin: 0 auto !important;
-        display: block !important;
-      }
-
-      svg text {
-        font-size: 12px !important;
-      }
-
-      svg text[font-size="32"] {
-        font-size: 18px !important;
-      }
-
-      svg text[font-size="24"] {
-        font-size: 16px !important;
-      }
-
-      svg text[font-size="20"] {
-        font-size: 14px !important;
-      }
-
-      svg text[font-size="36"] {
-        font-size: 20px !important;
-      }
-
-      svg text[font-size="48"] {
-        font-size: 24px !important;
-      }
-
-      video {
-        margin-top: 40px;
-      }
-
-      .mobile-video {
-        display: block !important;
-      }
-
-      .desktop-video {
-        display: none !important;
-      }
-
-      img {
+        width: 100%;
         height: auto;
-        max-height: 400px;
       }
 
-      #faq .container > div {
-        max-width: 100% !important;
-        margin: 0 auto !important;
+      /* FAQ */
+      details {
+        background: #161616;
+        padding: 20px;
+        border-radius: 20px;
+        margin-bottom: 14px;
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        max-width: 100%;
+        display: block;
+      }
+
+      details:hover {
+        border-color: #13ef96;
+      }
+
+      details[open] {
+        border-color: #13ef96;
+      }
+
+      summary {
+        font-size: 18px;
+        font-weight: 600;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+        width: 100%;
+      }
+
+      summary::-webkit-details-marker {
+        display: none;
+      }
+
+      summary::after {
+        content: "+";
+        font-size: 24px;
+        color: #13ef96;
+        transition: transform 0.3s ease;
+      }
+
+      details[open] summary::after {
+        transform: rotate(45deg);
+      }
+
+      details p {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: left;
       }
 
       .faq-wrapper {
-        max-width: 100% !important;
+        max-width: 60%;
+        margin: 0 auto;
       }
 
-      .pricing-grid {
-        grid-template-columns: 1fr !important;
+      /* Responsive */
+      @media (min-width: 1366px) {
+        h1 {
+          font-size: 56px;
+        }
+
+        h2 {
+          font-size: 36px;
+        }
+
+        p {
+          font-size: 20px;
+        }
+
+        .container {
+          max-width: 1400px;
+          padding: 60px 40px;
+        }
+
+        .hero-section {
+          padding-top: 120px;
+          padding-bottom: 120px;
+        }
+
+        .card {
+          padding: 36px;
+        }
+
+        .btn {
+          padding: 14px 28px;
+          font-size: 16px;
+        }
+
+        .badge {
+          font-size: 16px;
+        }
+
+        svg {
+          max-width: 850px !important;
+        }
       }
-    }
 
-    /* Footer */
-    .footer {
-      background: transparent;
-      padding: 30px 24px;
-      text-align: center;
-      border-top: none;
-    }
+      @media (min-width: 1200px) and (max-width: 1365px) {
+        h1 {
+          font-size: 52px;
+        }
 
-    .footer-logo {
-      height: 32px;
-      width: auto;
-      margin: 0 auto 16px;
-      display: block;
-    }
-  </style>
-</head>
+        h2 {
+          font-size: 34px;
+        }
 
-<body>
+        p {
+          font-size: 19px;
+        }
 
-<!-- HEADER -->
-<header class="header">
-  <div class="header-content">
-    <img src="logo.png" alt="Profit First" class="logo">
-    <nav class="nav-links">
-      <a href="#features">Features</a>
-      <a href="#audit">How it Works</a>
-      <a href="#faq">FAQ</a>
-      <a href="https://profitfirstanalytics.co.in/signup" target="_blank" class="btn" style="margin-top: 0; padding: 8px 20px;">Get Free Profit Audit</a>
-    </nav>
-    <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
+        .container {
+          max-width: 1300px;
+          padding: 55px 35px;
+        }
+
+        .hero-section {
+          padding-top: 110px;
+          padding-bottom: 110px;
+        }
+
+        .card {
+          padding: 32px;
+        }
+
+        .btn {
+          padding: 13px 26px;
+          font-size: 15px;
+        }
+
+        .badge {
+          font-size: 15px;
+        }
+
+        svg {
+          max-width: 850px !important;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .grid-2,
+        .grid-3 {
+          grid-template-columns: 1fr;
+          gap: 30px;
+        }
+
+        h1 {
+          font-size: 26px;
+          text-align: center;
+          line-height: 1.3;
+        }
+
+        h2 {
+          font-size: 30px;
+          text-align: center;
+        }
+
+        p {
+          font-size: 16px;
+        }
+
+        .container {
+          padding: 15px 16px;
+        }
+
+        section {
+          padding-top: 30px;
+          padding-bottom: 30px;
+        }
+
+        .hero-section {
+          padding-top: 80px;
+          padding-bottom: 30px;
+          min-height: auto;
+        }
+
+        .hero-section .container {
+          text-align: center;
+        }
+
+        .hero-section .container > div:first-child {
+          text-align: center;
+        }
+
+        .hero-section .container > div:first-child > div {
+          justify-content: center !important;
+          margin-top: 20px;
+        }
+
+        .hero-section .container > div:first-child > div > div {
+          flex-wrap: nowrap;
+        }
+
+        .btn {
+          padding: 10px 16px;
+          font-size: 16px;
+        }
+
+        .badge {
+          font-size: 12px;
+          justify-content: center;
+          display: flex;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .mobile-menu-toggle {
+          display: flex;
+        }
+
+        .blur-circle-top {
+          width: 200px;
+          height: 200px;
+        }
+
+        .card {
+          padding: 20px;
+        }
+
+        .header {
+          padding: 12px 16px;
+        }
+
+        .logo {
+          height: 28px;
+        }
+
+        h3 {
+          font-size: 18px;
+        }
+
+        svg {
+          max-width: 100% !important;
+          height: auto !important;
+          margin: 0 auto !important;
+          display: block !important;
+        }
+
+        svg text {
+          font-size: 12px !important;
+        }
+
+        svg text[font-size="32"] {
+          font-size: 18px !important;
+        }
+
+        svg text[font-size="24"] {
+          font-size: 16px !important;
+        }
+
+        svg text[font-size="20"] {
+          font-size: 14px !important;
+        }
+
+        svg text[font-size="36"] {
+          font-size: 20px !important;
+        }
+
+        svg text[font-size="48"] {
+          font-size: 24px !important;
+        }
+
+        video {
+          margin-top: 40px;
+        }
+
+        .mobile-video {
+          display: block !important;
+        }
+
+        .desktop-video {
+          display: none !important;
+        }
+
+        img {
+          height: auto;
+          max-height: 400px;
+        }
+
+        #faq .container > div {
+          max-width: 100% !important;
+          margin: 0 auto !important;
+        }
+
+        .faq-wrapper {
+          max-width: 100% !important;
+        }
+
+        .pricing-grid {
+          grid-template-columns: 1fr !important;
+        }
+      }
+
+      /* Footer */
+      .footer {
+        background: transparent;
+        padding: 30px 24px;
+        text-align: center;
+        border-top: none;
+      }
+
+      .footer-logo {
+        height: 32px;
+        width: auto;
+        margin: 0 auto 16px;
+        display: block;
+      }
+
+      /* ── GLOBAL RESET & VARS ── */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --profirst-bg: #09090f;
+        --profirst-s1: #111119;
+        --profirst-s2: #17171f;
+        --profirst-s3: #1e1e28;
+        --profirst-b1: rgba(255, 255, 255, 0.06);
+        --profirst-b2: rgba(255, 255, 255, 0.11);
+        --profirst-g: #00e09a;
+        --profirst-gd: rgba(0, 224, 154, 0.1);
+        --profirst-r: #ff4060;
+        --profirst-rd: rgba(255, 64, 96, 0.1);
+        --profirst-y: #ffbb33;
+        --profirst-yd: rgba(255, 187, 51, 0.1);
+        --profirst-tx: #eeeef3;
+        --profirst-mu: #606075;
+        --profirst-fa: #1e1e2a;
+        --profirst-H: "Bricolage Grotesque", sans-serif;
+        --profirst-B: "DM Sans", sans-serif;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--profirst-bg);
+        color: var(--profirst-tx);
+        font-family: var(--profirst-B);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+
+      /* ── LAYOUT ── */
+      .profirst-wrap {
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      @media (min-width: 680px) {
+        .profirst-wrap {
+          max-width: 720px;
+          padding: 0 36px;
+        }
+      }
+      @media (min-width: 1020px) {
+        .profirst-wrap {
+          max-width: 1040px;
+          padding: 0 56px;
+        }
+      }
+
+      .profirst-sec {
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+      }
+      .profirst-sec + .profirst-sec {
+        border-top: 1px solid var(--profirst-b1);
+      }
+
+      /* ── REVEAL ANIMATIONS ── */
+      .profirst-rv {
+        opacity: 0;
+        transform: translateY(22px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+      .profirst-rv.profirst-on {
+        opacity: 1;
+        transform: none;
+      }
+      .profirst-rv.profirst-d1 {
+        transition-delay: 0.07s;
+      }
+      .profirst-rv.profirst-d2 {
+        transition-delay: 0.14s;
+      }
+      .profirst-rv.profirst-d3 {
+        transition-delay: 0.21s;
+      }
+      .profirst-rv.profirst-d4 {
+        transition-delay: 0.28s;
+      }
+
+      /* ── COMMON COMPONENTS ── */
+      .profirst-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 1.3px;
+        text-transform: uppercase;
+        color: var(--profirst-g);
+        background: var(--profirst-gd);
+        border: 1px solid rgba(0, 224, 154, 0.18);
+        border-radius: 20px;
+        padding: 5px 13px;
+        margin-bottom: 18px;
+      }
+      .profirst-chip::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        background: var(--profirst-g);
+        border-radius: 50%;
+      }
+
+      .profirst-h2 {
+        font-family: var(--profirst-H);
+        font-size: clamp(26px, 5vw, 42px);
+        font-weight: 800;
+        line-height: 1.12;
+        letter-spacing: -0.5px;
+        margin-bottom: 12px;
+      }
+      .profirst-h2 i {
+        font-style: italic;
+        color: var(--profirst-g);
+      }
+      .profirst-lead {
+        font-size: 15px;
+        color: var(--profirst-mu);
+        line-height: 1.7;
+        max-width: 500px;
+      }
+
+      /* ── NAVIGATION ── */
+      .profirst-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 200;
+        background: rgba(9, 9, 15, 0.88);
+        border-bottom: 1px solid var(--profirst-b1);
+        backdrop-filter: blur(14px);
+      }
+      .profirst-nav-inner {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 20px;
+        height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      @media (min-width: 680px) {
+        .profirst-nav-inner {
+          padding: 0 36px;
+        }
+      }
+      @media (min-width: 1020px) {
+        .profirst-nav-inner {
+          padding: 0 56px;
+        }
+      }
+
+      .profirst-nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        text-decoration: none;
+      }
+      .profirst-nav-logo-icon {
+        width: 32px;
+        height: 32px;
+        background: var(--profirst-g);
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--profirst-H);
+        font-weight: 800;
+        font-size: 14px;
+        color: var(--profirst-bg);
+      }
+      .profirst-nav-logo-txt {
+        font-family: var(--profirst-H);
+        font-weight: 700;
+        font-size: 15px;
+        color: var(--profirst-tx);
+      }
+      .profirst-nav-logo-txt span {
+        color: var(--profirst-g);
+      }
+
+      .profirst-nav-links {
+        display: none;
+        gap: 24px;
+      }
+      @media (min-width: 680px) {
+        .profirst-nav-links {
+          display: flex;
+        }
+      }
+      .profirst-nav-links a {
+        font-size: 13.5px;
+        color: var(--profirst-mu);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .profirst-nav-links a:hover {
+        color: var(--profirst-tx);
+      }
+
+      .profirst-nav-cta {
+        font-size: 13px;
+        font-weight: 700;
+        font-family: var(--profirst-H);
+        background: var(--profirst-g);
+        color: var(--profirst-bg);
+        border: none;
+        border-radius: 9px;
+        padding: 9px 18px;
+        cursor: pointer;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: all 0.2s;
+      }
+      .profirst-nav-cta:hover {
+        background: #00ffb8;
+        transform: translateY(-1px);
+      }
+
+      /* ── HERO SECTION ── */
+      #profirst-hero {
+        padding: 140px 0 80px;
+        background: var(--profirst-bg);
+      }
+      .profirst-hero-noise {
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");
+        pointer-events: none;
+        opacity: 0.5;
+      }
+      .profirst-hero-glow {
+        position: absolute;
+        width: 700px;
+        height: 500px;
+        background: radial-gradient(
+          ellipse,
+          rgba(0, 224, 154, 0.06) 0%,
+          transparent 65%
+        );
+        top: -80px;
+        left: 50%;
+        transform: translateX(-50%);
+        pointer-events: none;
+      }
+
+      .profirst-hero-stack-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--profirst-mu);
+        background: var(--profirst-s1);
+        border: 1px solid var(--profirst-b2);
+        border-radius: 20px;
+        padding: 5px 14px;
+        margin-bottom: 24px;
+      }
+      .profirst-hero-stack-label span {
+        color: var(--profirst-tx);
+        font-weight: 600;
+      }
+
+      .profirst-hero-h1 {
+        font-family: var(--profirst-H);
+        font-size: clamp(32px, 6vw, 58px);
+        font-weight: 800;
+        line-height: 1.08;
+        letter-spacing: -0.8px;
+        margin-bottom: 20px;
+      }
+      .profirst-hero-h1 i {
+        font-style: italic;
+        color: var(--profirst-g);
+      }
+      .profirst-hero-h1 .profirst-dim {
+        color: var(--profirst-mu);
+      }
+
+      .profirst-hero-sub {
+        font-size: 16px;
+        color: var(--profirst-mu);
+        line-height: 1.7;
+        max-width: 540px;
+        margin-bottom: 32px;
+      }
+      .profirst-hero-sub strong {
+        color: var(--profirst-tx);
+      }
+
+      .profirst-hero-btns {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 36px;
+      }
+      .profirst-btn-primary {
+        font-size: 15px;
+        font-weight: 700;
+        font-family: var(--profirst-H);
+        background: var(--profirst-g);
+        color: var(--profirst-bg);
+        border: none;
+        border-radius: 11px;
+        padding: 14px 26px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+        display: inline-block;
+      }
+      .profirst-btn-primary:hover {
+        background: #00ffb8;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 32px rgba(0, 224, 154, 0.25);
+      }
+      .profirst-btn-secondary {
+        font-size: 15px;
+        font-weight: 600;
+        font-family: var(--profirst-H);
+        background: transparent;
+        color: var(--profirst-tx);
+        border: 1px solid var(--profirst-b2);
+        border-radius: 11px;
+        padding: 13px 22px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+        display: inline-block;
+      }
+      .profirst-btn-secondary:hover {
+        border-color: var(--profirst-b2);
+        background: var(--profirst-s1);
+      }
+
+      .profirst-hero-trust {
+        font-size: 12px;
+        color: var(--profirst-mu);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .profirst-hero-trust::before {
+        content: "✓";
+        color: var(--profirst-g);
+        font-weight: 700;
+      }
+
+      /* hero stat row */
+      .profirst-hero-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
+        margin-top: 48px;
+        border-radius: 14px;
+        overflow: hidden;
+      }
+      .profirst-hstat {
+        background: var(--profirst-s1);
+        border: 1px solid var(--profirst-b1);
+        padding: 18px 20px;
+      }
+      .profirst-hstat:first-child {
+        border-radius: 12px 0 0 12px;
+      }
+      .profirst-hstat:last-child {
+        border-radius: 0 12px 12px 0;
+      }
+      .profirst-hstat-val {
+        font-family: var(--profirst-H);
+        font-size: clamp(20px, 3vw, 28px);
+        font-weight: 800;
+        margin-bottom: 4px;
+      }
+      .profirst-hstat-val.profirst-g {
+        color: var(--profirst-g);
+      }
+      .profirst-hstat-val.profirst-r {
+        color: var(--profirst-r);
+      }
+      .profirst-hstat-val.profirst-y {
+        color: var(--profirst-y);
+      }
+      .profirst-hstat-lbl {
+        font-size: 11px;
+        color: var(--profirst-mu);
+        line-height: 1.4;
+      }
+
+      /* ── SECTION: WHY PROFIT IS FAKE ── */
+      #profirst-fake {
+        background: var(--profirst-s1);
+      }
+      .profirst-fake-glow {
+        position: absolute;
+        width: 500px;
+        height: 300px;
+        background: radial-gradient(
+          ellipse,
+          rgba(255, 64, 96, 0.04) 0%,
+          transparent 70%
+        );
+        top: 0;
+        right: -100px;
+        pointer-events: none;
+      }
+
+      .profirst-fake-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-top: 40px;
+      }
+      @media (min-width: 680px) {
+        .profirst-fake-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .profirst-fake-card {
+        background: var(--profirst-s2);
+        border: 1px solid var(--profirst-b1);
+        border-radius: 14px;
+        padding: 22px 20px;
+        transition:
+          border-color 0.2s,
+          transform 0.2s;
+        position: relative;
+        overflow: hidden;
+      }
+      .profirst-fake-card:hover {
+        border-color: var(--profirst-b2);
+        transform: translateY(-2px);
+      }
+      .profirst-fake-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+      }
+      .profirst-fake-card.profirst-c1::before {
+        background: var(--profirst-r);
+      }
+      .profirst-fake-card.profirst-c2::before {
+        background: var(--profirst-y);
+      }
+      .profirst-fake-card.profirst-c3::before {
+        background: var(--profirst-g);
+      }
+
+      .profirst-fc-ico {
+        font-size: 24px;
+        margin-bottom: 14px;
+      }
+      .profirst-fc-ttl {
+        font-family: var(--profirst-H);
+        font-size: 17px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: var(--profirst-tx);
+      }
+      .profirst-fc-desc {
+        font-size: 13.5px;
+        color: var(--profirst-mu);
+        line-height: 1.65;
+      }
+
+      /* ── SECTION: GAP TABLE ── */
+      #profirst-gap {
+        background: var(--profirst-bg);
+      }
+      .profirst-gap-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        margin-top: 40px;
+      }
+      @media (min-width: 680px) {
+        .profirst-gap-grid {
+          flex-direction: row;
+        }
+      }
+
+      .profirst-gap-card {
+        flex: 1;
+        border-radius: 14px;
+        overflow: hidden;
+      }
+      .profirst-gap-head {
+        padding: 13px 18px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .profirst-gap-head.profirst-blind {
+        background: rgba(255, 64, 96, 0.12);
+        color: var(--profirst-r);
+      }
+      .profirst-gap-head.profirst-truth {
+        background: rgba(0, 224, 154, 0.1);
+        color: var(--profirst-g);
+      }
+      .profirst-gap-rows {
+        background: var(--profirst-s1);
+        border: 1px solid var(--profirst-b1);
+      }
+      .profirst-gap-row-item {
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--profirst-b1);
+      }
+      .profirst-gap-row-item:last-child {
+        border-bottom: none;
+      }
+      .profirst-gi-label {
+        font-size: 10.5px;
+        color: var(--profirst-mu);
+        margin-bottom: 5px;
+        font-weight: 500;
+      }
+      .profirst-gi-val {
+        font-family: var(--profirst-H);
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.1;
+      }
+      .profirst-gi-val.profirst-r {
+        color: var(--profirst-r);
+      }
+      .profirst-gi-val.profirst-g {
+        color: var(--profirst-g);
+      }
+      .profirst-gi-note {
+        font-size: 11.5px;
+        color: var(--profirst-mu);
+        margin-top: 4px;
+        line-height: 1.4;
+      }
+
+      .profirst-gap-footer {
+        margin-top: 28px;
+        text-align: center;
+        font-size: 15px;
+        color: var(--profirst-mu);
+        line-height: 1.7;
+      }
+      .profirst-gap-footer strong {
+        color: var(--profirst-tx);
+      }
+
+      /* ── SECTION: HOW IT WORKS ── */
+      #profirst-how {
+        background: var(--profirst-s1);
+      }
+      .profirst-how-glow {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(0, 224, 154, 0.05) 0%,
+          transparent 70%
+        );
+        top: -80px;
+        right: -120px;
+        pointer-events: none;
+      }
+
+      .profirst-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin-top: 40px;
+      }
+      .profirst-step {
+        display: flex;
+        gap: 18px;
+        padding: 24px 0;
+        border-bottom: 1px solid var(--profirst-b1);
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+      .profirst-step:first-child {
+        padding-top: 0;
+      }
+      .profirst-step:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+      .profirst-step:not(.profirst-act) {
+        opacity: 0.42;
+      }
+      .profirst-step:not(.profirst-act):hover {
+        opacity: 0.68;
+      }
+
+      .profirst-step-n {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: var(--profirst-s2);
+        border: 1px solid var(--profirst-b2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--profirst-H);
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--profirst-mu);
+        flex-shrink: 0;
+        transition: all 0.25s;
+      }
+      .profirst-step.profirst-act .profirst-step-n {
+        background: var(--profirst-g);
+        color: var(--profirst-bg);
+        border-color: var(--profirst-g);
+      }
+      .profirst-step-title {
+        font-family: var(--profirst-H);
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--profirst-tx);
+        margin-bottom: 5px;
+      }
+      .profirst-step.profirst-act .profirst-step-title {
+        color: var(--profirst-g);
+      }
+      .profirst-step-desc {
+        font-size: 13.5px;
+        color: var(--profirst-mu);
+        line-height: 1.6;
+      }
+      .profirst-step-pills {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+      .profirst-spill {
+        font-size: 10.5px;
+        font-weight: 600;
+        padding: 3px 9px;
+        border-radius: 5px;
+        background: var(--profirst-fa);
+        color: var(--profirst-mu);
+      }
+      .profirst-spill.profirst-s {
+        background: rgba(150, 191, 119, 0.12);
+        color: #96bf77;
+      }
+      .profirst-spill.profirst-m {
+        background: rgba(24, 119, 242, 0.12);
+        color: #5a9ef0;
+      }
+      .profirst-spill.profirst-r {
+        background: rgba(255, 142, 60, 0.12);
+        color: #ff8e3c;
+      }
+      .profirst-spill.profirst-fr {
+        background: var(--profirst-gd);
+        color: var(--profirst-g);
+      }
+
+      .profirst-panel-wrap {
+        margin-top: 28px;
+      }
+      .profirst-panel {
+        display: none;
+        background: var(--profirst-s2);
+        border: 1px solid var(--profirst-b2);
+        border-radius: 16px;
+        overflow: hidden;
+        animation: profirst-pIn 0.3s ease;
+      }
+      .profirst-panel.profirst-show {
+        display: block;
+      }
+      @keyframes profirst-pIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      .profirst-pb {
+        background: var(--profirst-s3);
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 1px solid var(--profirst-b1);
+      }
+      .profirst-pdots {
+        display: flex;
+        gap: 5px;
+      }
+      .profirst-pdot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+      }
+      .profirst-pb-title {
+        font-size: 11.5px;
+        color: var(--profirst-mu);
+        margin-left: 6px;
+      }
+      .profirst-pbody {
+        padding: 20px;
+      }
+
+      .profirst-conn-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .profirst-conn-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--profirst-s3);
+        border: 1px solid var(--profirst-b1);
+        border-radius: 10px;
+        padding: 13px 16px;
+      }
+      .profirst-conn-l {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .profirst-conn-ico {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+      }
+      .profirst-conn-ico.profirst-sh {
+        background: rgba(150, 191, 119, 0.15);
+      }
+      .profirst-conn-ico.profirst-mt {
+        background: rgba(24, 119, 242, 0.15);
+      }
+      .profirst-conn-ico.profirst-sr {
+        background: rgba(255, 142, 60, 0.15);
+      }
+      .profirst-conn-name {
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--profirst-tx);
+      }
+      .profirst-conn-sub {
+        font-size: 11px;
+        color: var(--profirst-mu);
+      }
+      .profirst-conn-btn {
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 6px 13px;
+        border-radius: 7px;
+        border: none;
+        cursor: pointer;
+        font-family: var(--profirst-B);
+      }
+      .profirst-conn-btn.profirst-ok {
+        background: var(--profirst-gd);
+        color: var(--profirst-g);
+      }
+      .profirst-conn-btn.profirst-go {
+        background: var(--profirst-s1);
+        color: var(--profirst-mu);
+        border: 1px solid var(--profirst-b2);
+      }
+      .profirst-conn-time {
+        text-align: center;
+        margin-top: 14px;
+        font-size: 12px;
+        color: var(--profirst-mu);
+      }
+
+      .profirst-calc-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .profirst-calc-r {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+      }
+      .profirst-calc-lbl {
+        color: var(--profirst-mu);
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .profirst-calc-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .profirst-calc-v {
+        font-weight: 600;
+      }
+      .profirst-calc-v.profirst-g {
+        color: var(--profirst-g);
+      }
+      .profirst-calc-v.profirst-r {
+        color: var(--profirst-r);
+      }
+      .profirst-calc-div {
+        height: 1px;
+        background: var(--profirst-b1);
+        margin: 4px 0;
+      }
+      .profirst-calc-result {
+        background: var(--profirst-gd);
+        border: 1px solid rgba(0, 224, 154, 0.18);
+        border-radius: 10px;
+        padding: 14px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+      }
+      .profirst-cr-lbl {
+        font-size: 12.5px;
+        color: var(--profirst-g);
+      }
+      .profirst-cr-val {
+        font-family: var(--profirst-H);
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--profirst-g);
+      }
+
+      .profirst-ins-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .profirst-ins-card {
+        background: var(--profirst-s3);
+        border: 1px solid var(--profirst-b1);
+        border-radius: 10px;
+        padding: 14px 16px;
+        display: flex;
+        gap: 12px;
+      }
+      .profirst-ins-card.profirst-al {
+        border-color: rgba(255, 64, 96, 0.25);
+        background: rgba(255, 64, 96, 0.05);
+      }
+      .profirst-ins-ico {
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+      .profirst-ins-ttl {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--profirst-tx);
+        margin-bottom: 3px;
+      }
+      .profirst-ins-card.profirst-al .profirst-ins-ttl {
+        color: var(--profirst-r);
+      }
+      .profirst-ins-dsc {
+        font-size: 12px;
+        color: var(--profirst-mu);
+        line-height: 1.5;
+      }
+
+      /* ── SECTION: BEFORE AFTER ── */
+      #profirst-ba {
+        background: var(--profirst-bg);
+      }
+      .profirst-ba-wrap {
+        margin-top: 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      @media (min-width: 680px) {
+        .profirst-ba-wrap {
+          flex-direction: row;
+          gap: 10px;
+          align-items: stretch;
+        }
+      }
+      .profirst-ba-col {
+        flex: 1;
+        background: var(--profirst-s1);
+        border: 1px solid var(--profirst-b1);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+      .profirst-ba-col.profirst-af {
+        border-color: rgba(0, 224, 154, 0.22);
+        box-shadow: 0 0 30px rgba(0, 224, 154, 0.05);
+      }
+      .profirst-ba-hd {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--profirst-b1);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .profirst-ba-hd-ico {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+      }
+      .profirst-ba-hd-ico.profirst-b {
+        background: var(--profirst-rd);
+      }
+      .profirst-ba-hd-ico.profirst-a {
+        background: var(--profirst-gd);
+      }
+      .profirst-ba-hd-ttl {
+        font-family: var(--profirst-H);
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .profirst-ba-hd-ttl.profirst-b {
+        color: var(--profirst-r);
+      }
+      .profirst-ba-hd-ttl.profirst-a {
+        color: var(--profirst-g);
+      }
+      .profirst-ba-hd-sub {
+        font-size: 11px;
+        color: var(--profirst-mu);
+        margin-top: 1px;
+      }
+      .profirst-ba-list {
+        padding: 6px 0;
+      }
+      .profirst-ba-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+        padding: 13px 20px;
+        border-bottom: 1px solid var(--profirst-b1);
+      }
+      .profirst-ba-item:last-child {
+        border-bottom: none;
+      }
+      .profirst-ba-emoji {
+        font-size: 15px;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .profirst-ba-txt {
+        font-size: 13px;
+        line-height: 1.55;
+        color: var(--profirst-mu);
+      }
+      .profirst-ba-txt.profirst-pain strong {
+        color: rgba(255, 90, 110, 0.85);
+      }
+      .profirst-ba-txt.profirst-gain strong {
+        color: rgba(0, 224, 154, 0.9);
+      }
+      .profirst-vs-pill {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 0;
+      }
+      @media (min-width: 680px) {
+        .profirst-vs-pill {
+          padding: 0 4px;
+        }
+      }
+      .profirst-vs-inner {
+        width: 36px;
+        height: 36px;
+        background: var(--profirst-s2);
+        border: 1px solid var(--profirst-b2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--profirst-mu);
+      }
+
+      /* ── SECTION: FEATURES ── */
+      #profirst-features {
+        background: var(--profirst-s1);
+      }
+      .profirst-feat-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-top: 40px;
+      }
+      @media (min-width: 680px) {
+        .profirst-feat-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .profirst-feat-card {
+        background: var(--profirst-s2);
+        border: 1px solid var(--profirst-b1);
+        border-radius: 14px;
+        padding: 22px 20px;
+        transition: all 0.2s;
+      }
+      .profirst-feat-card:hover {
+        border-color: var(--profirst-b2);
+        transform: translateY(-2px);
+      }
+      .profirst-feat-ico {
+        font-size: 22px;
+        margin-bottom: 14px;
+      }
+      .profirst-feat-ttl {
+        font-family: var(--profirst-H);
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 7px;
+      }
+      .profirst-feat-desc {
+        font-size: 13px;
+        color: var(--profirst-mu);
+        line-height: 1.65;
+      }
+
+      /* ── SECTION: AUDIT ── */
+      #profirst-audit {
+        background: var(--profirst-bg);
+      }
+      .profirst-audit-gl1 {
+        position: absolute;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(
+          circle,
+          rgba(0, 224, 154, 0.06) 0%,
+          transparent 70%
+        );
+        bottom: -80px;
+        left: -80px;
+        pointer-events: none;
+      }
+      .profirst-audit-gl2 {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 187, 51, 0.04) 0%,
+          transparent 70%
+        );
+        top: -60px;
+        right: -60px;
+        pointer-events: none;
+      }
+
+      .profirst-audit-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 32px;
+        margin-top: 40px;
+      }
+      @media (min-width: 680px) {
+        .profirst-audit-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 40px;
+          align-items: start;
+        }
+      }
+
+      .profirst-ck-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .profirst-ck-item {
+        display: flex;
+        gap: 13px;
+        padding: 18px 0;
+        border-bottom: 1px solid var(--profirst-b1);
+      }
+      .profirst-ck-item:first-child {
+        padding-top: 0;
+      }
+      .profirst-ck-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+      .profirst-ck-icon {
+        width: 26px;
+        height: 26px;
+        background: var(--profirst-gd);
+        border: 1px solid rgba(0, 224, 154, 0.18);
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: var(--profirst-g);
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .profirst-ck-ttl {
+        font-family: var(--profirst-H);
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--profirst-tx);
+        margin-bottom: 4px;
+      }
+      .profirst-ck-dsc {
+        font-size: 12.5px;
+        color: var(--profirst-mu);
+        line-height: 1.55;
+      }
+
+      .profirst-cta-card {
+        background: var(--profirst-s1);
+        border: 1px solid rgba(0, 224, 154, 0.2);
+        border-radius: 20px;
+        padding: 30px 24px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .profirst-cta-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--profirst-g),
+          transparent
+        );
+      }
+      .profirst-cta-card::after {
+        content: "";
+        position: absolute;
+        top: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 180px;
+        height: 180px;
+        background: radial-gradient(
+          circle,
+          rgba(0, 224, 154, 0.08) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .profirst-cta-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: var(--profirst-g);
+        font-weight: 600;
+        background: var(--profirst-gd);
+        border: 1px solid rgba(0, 224, 154, 0.18);
+        border-radius: 20px;
+        padding: 5px 13px;
+        margin-bottom: 18px;
+      }
+      .profirst-cta-ttl {
+        font-family: var(--profirst-H);
+        font-size: clamp(22px, 4vw, 28px);
+        font-weight: 800;
+        line-height: 1.15;
+        margin-bottom: 10px;
+      }
+      .profirst-cta-ttl i {
+        color: var(--profirst-g);
+        font-style: italic;
+      }
+      .profirst-cta-sub {
+        font-size: 13px;
+        color: var(--profirst-mu);
+        line-height: 1.6;
+        margin-bottom: 22px;
+      }
+      .profirst-cta-btn {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        background: var(--profirst-g);
+        color: var(--profirst-bg);
+        font-family: var(--profirst-H);
+        font-size: 15px;
+        font-weight: 800;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        margin-bottom: 12px;
+      }
+      .profirst-cta-btn:hover {
+        background: #00ffb8;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 224, 154, 0.28);
+      }
+      .profirst-cta-trust {
+        font-size: 11.5px;
+        color: var(--profirst-mu);
+      }
+      .profirst-cta-trust span {
+        color: var(--profirst-tx);
+      }
+      .profirst-spots {
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid var(--profirst-b1);
+      }
+      .profirst-spots-bar-bg {
+        background: var(--profirst-fa);
+        border-radius: 4px;
+        height: 5px;
+        overflow: hidden;
+        margin: 8px 0 7px;
+      }
+      .profirst-spots-fill {
+        height: 100%;
+        width: 73.5%;
+        background: linear-gradient(90deg, var(--profirst-g), #00c090);
+        border-radius: 4px;
+      }
+      .profirst-spots-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: var(--profirst-mu);
+      }
+      .profirst-spots-row .profirst-tk {
+        color: var(--profirst-g);
+        font-weight: 700;
+      }
+
+      /* ── SECTION: PRICING ── */
+      #profirst-pricing {
+        background: var(--profirst-s1);
+      }
+      .profirst-price-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin-top: 40px;
+      }
+      @media (min-width: 680px) {
+        .profirst-price-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+          max-width: 720px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+
+      .profirst-price-card {
+        background: var(--profirst-s2);
+        border: 1px solid var(--profirst-b1);
+        border-radius: 18px;
+        padding: 28px 24px;
+        position: relative;
+        overflow: hidden;
+        transition: border-color 0.2s;
+      }
+      .profirst-price-card:hover {
+        border-color: var(--profirst-b2);
+      }
+      .profirst-price-card.profirst-popular {
+        border-color: rgba(0, 224, 154, 0.25);
+        box-shadow: 0 0 32px rgba(0, 224, 154, 0.07);
+      }
+      .profirst-price-card.profirst-popular::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--profirst-g),
+          transparent
+        );
+      }
+
+      .profirst-popular-badge {
+        display: inline-flex;
+        font-size: 10.5px;
+        font-weight: 700;
+        color: var(--profirst-g);
+        background: var(--profirst-gd);
+        border: 1px solid rgba(0, 224, 154, 0.2);
+        border-radius: 20px;
+        padding: 3px 10px;
+        margin-bottom: 16px;
+      }
+
+      .profirst-price-plan {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        color: var(--profirst-mu);
+        margin-bottom: 10px;
+      }
+      .profirst-price-amt {
+        font-family: var(--profirst-H);
+        font-size: 38px;
+        font-weight: 800;
+        color: var(--profirst-tx);
+        line-height: 1;
+        margin-bottom: 4px;
+      }
+      .profirst-price-amt span {
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--profirst-mu);
+      }
+      .profirst-price-period {
+        font-size: 12px;
+        color: var(--profirst-mu);
+        margin-bottom: 6px;
+      }
+      .profirst-price-trial {
+        font-size: 12px;
+        color: var(--profirst-g);
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+      .profirst-price-desc {
+        font-size: 13px;
+        color: var(--profirst-mu);
+        line-height: 1.55;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--profirst-b1);
+      }
+
+      .profirst-price-features {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 24px;
+      }
+      .profirst-pf-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 13px;
+        color: var(--profirst-mu);
+      }
+      .profirst-pf-item::before {
+        content: "✓";
+        color: var(--profirst-g);
+        font-weight: 700;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .profirst-pf-item.profirst-soon {
+        opacity: 0.5;
+      }
+      .profirst-pf-item.profirst-soon::after {
+        content: " (soon)";
+        font-size: 11px;
+        color: var(--profirst-mu);
+      }
+
+      .profirst-price-btn {
+        display: block;
+        width: 100%;
+        padding: 14px;
+        text-align: center;
+        font-family: var(--profirst-H);
+        font-size: 14px;
+        font-weight: 700;
+        border-radius: 10px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: none;
+      }
+      .profirst-price-btn.profirst-primary {
+        background: var(--profirst-g);
+        color: var(--profirst-bg);
+      }
+      .profirst-price-btn.profirst-primary:hover {
+        background: #00ffb8;
+        transform: translateY(-1px);
+      }
+      .profirst-price-btn.profirst-secondary {
+        background: var(--profirst-s3);
+        color: var(--profirst-tx);
+        border: 1px solid var(--profirst-b2);
+      }
+      .profirst-price-btn.profirst-secondary:hover {
+        background: var(--profirst-s2);
+      }
+
+      .profirst-price-note {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 12px;
+        color: var(--profirst-mu);
+      }
+      .profirst-price-note strong {
+        color: var(--profirst-g);
+      }
+
+      /* ── SECTION: FAQ ── */
+      #profirst-faq {
+        background: var(--profirst-bg);
+      }
+      .profirst-faq-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin-top: 40px;
+        max-width: 680px;
+      }
+      .profirst-faq-item {
+        border-bottom: 1px solid var(--profirst-b1);
+      }
+      .profirst-faq-item:first-child {
+        border-top: 1px solid var(--profirst-b1);
+      }
+      .profirst-faq-q {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 0;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--profirst-tx);
+        font-family: var(--profirst-H);
+      }
+      .profirst-faq-q:hover {
+        color: var(--profirst-g);
+      }
+      .profirst-faq-arrow {
+        font-size: 14px;
+        color: var(--profirst-mu);
+        transition: transform 0.25s;
+        flex-shrink: 0;
+      }
+      .profirst-faq-item.profirst-open .profirst-faq-arrow {
+        transform: rotate(180deg);
+        color: var(--profirst-g);
+      }
+      .profirst-faq-a {
+        font-size: 13.5px;
+        color: var(--profirst-mu);
+        line-height: 1.7;
+        max-height: 0;
+        overflow: hidden;
+        transition:
+          max-height 0.3s ease,
+          padding 0.3s ease;
+      }
+      .profirst-faq-item.profirst-open .profirst-faq-a {
+        max-height: 200px;
+        padding-bottom: 18px;
+      }
+
+      /* ── SECTION: FINAL CTA ── */
+      #profirst-final {
+        background: var(--profirst-s1);
+      }
+      .profirst-final-glow {
+        position: absolute;
+        width: 600px;
+        height: 400px;
+        background: radial-gradient(
+          ellipse,
+          rgba(0, 224, 154, 0.06) 0%,
+          transparent 70%
+        );
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+      .profirst-final-inner {
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        max-width: 560px;
+        margin: 0 auto;
+      }
+      .profirst-final-h {
+        font-family: var(--profirst-H);
+        font-size: clamp(28px, 5vw, 46px);
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -0.5px;
+        margin-bottom: 14px;
+      }
+      .profirst-final-h i {
+        font-style: italic;
+        color: var(--profirst-g);
+      }
+      .profirst-final-sub {
+        font-size: 15px;
+        color: var(--profirst-mu);
+        line-height: 1.65;
+        margin-bottom: 28px;
+      }
+      .profirst-final-btns {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 16px;
+      }
+      .profirst-final-trust {
+        font-size: 12px;
+        color: var(--profirst-mu);
+      }
+
+      /* ── FOOTER ── */
+      .profirst-footer {
+        background: var(--profirst-bg);
+        border-top: 1px solid var(--profirst-b1);
+        padding: 36px 0;
+      }
+      .profirst-footer-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      .profirst-footer-logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+      }
+      .profirst-footer-logo-icon {
+        width: 28px;
+        height: 28px;
+        background: var(--profirst-g);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--profirst-H);
+        font-weight: 800;
+        font-size: 12px;
+        color: var(--profirst-bg);
+      }
+      .profirst-footer-logo-txt {
+        font-family: var(--profirst-H);
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--profirst-tx);
+      }
+      .profirst-footer-logo-txt span {
+        color: var(--profirst-g);
+      }
+      .profirst-footer-copy {
+        font-size: 12px;
+        color: var(--profirst-mu);
+      }
+      .profirst-footer-links {
+        display: flex;
+        gap: 18px;
+      }
+      .profirst-footer-links a {
+        font-size: 12.5px;
+        color: var(--profirst-mu);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .profirst-footer-links a:hover {
+        color: var(--profirst-tx);
+      }
+
+      /* ── ALERT BANNER ── */
+      .profirst-alert-bar {
+        background: rgba(255, 64, 96, 0.07);
+        border: 1px solid rgba(255, 64, 96, 0.2);
+        border-radius: 12px;
+        padding: 13px 18px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-top: 28px;
+      }
+      .profirst-alert-ico {
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+      .profirst-alert-ttl {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--profirst-r);
+        margin-bottom: 3px;
+      }
+      .profirst-alert-desc {
+        font-size: 12px;
+        color: var(--profirst-mu);
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <header class="header">
+      <nav class="profirst-nav">
+        <div class="profirst-nav-inner">
+          <a href="#" class="profirst-nav-logo">
+            <img src="logo.png" alt="Profit First" class="logo" />
+          </a>
+          <div class="profirst-nav-links">
+            <a href="#profirst-features">Features</a>
+            <a href="#profirst-how">How It Works</a>
+            <a href="#profirst-pricing">Pricing</a>
+            <a href="#profirst-faq">FAQ</a>
+          </div>
+          <a
+            href="https://profitfirstanalytics.co.in/signup"
+            class="profirst-nav-cta"
+            >Get Free Audit</a
+          >
+        </div>
+      </nav>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#features" onclick="toggleMobileMenu()">Features</a>
+      <a href="#audit" onclick="toggleMobileMenu()">How It Works</a>
+      <a href="#faq" onclick="toggleMobileMenu()">FAQ</a>
+      <a
+        href="https://profitfirstanalytics.co.in/signup"
+        target="_blank"
+        class="btn"
+        onclick="toggleMobileMenu()"
+        >Get Free Profit Audit</a
+      >
+    </div>
+
+    <script>
+      function toggleMobileMenu() {
+        const menu = document.getElementById("mobileMenu");
+        const toggle = document.querySelector(".mobile-menu-toggle");
+        menu.classList.toggle("active");
+        toggle.classList.toggle("active");
+      }
+
+      // Close menu when clicking outside
+      document.addEventListener("click", function (event) {
+        const menu = document.getElementById("mobileMenu");
+        const toggle = document.querySelector(".mobile-menu-toggle");
+        const header = document.querySelector(".header");
+
+        if (!header.contains(event.target) && !menu.contains(event.target)) {
+          menu.classList.remove("active");
+          toggle.classList.remove("active");
+        }
+      });
+    </script>
+
+    <!-- HERO -->
+    <section class="profirst-sec" id="profirst-hero">
+      <div class="profirst-hero-noise"></div>
+      <div class="profirst-hero-glow"></div>
+      <div class="profirst-wrap">
+        <div class="profirst-rv">
+          <div class="profirst-hero-stack-label">
+            🛍️ <span>Shopify</span> &nbsp;+&nbsp; 📣
+            <span>Meta Ads</span> &nbsp;+&nbsp; 🚚 <span>Shiprocket</span>
+          </div>
+        </div>
+
+        <div class="profirst-rv profirst-d1">
+          <h1 class="profirst-hero-h1">
+            Most D2C brands think<br />they are profitable.<br /><i
+              >Most are wrong.</i
+            >
+          </h1>
+        </div>
+
+        <div class="profirst-rv profirst-d2">
+          <p class="profirst-hero-sub">
+            You check Shopify — revenue looks great. You check Meta — ROAS looks
+            fine. But at the end of the month,
+            <strong>your bank account tells a different story.</strong> Profit
+            First shows you exactly where your money is going — in real time.
+          </p>
+        </div>
+
+        <div class="profirst-rv profirst-d3">
+          <div class="profirst-hero-btns">
+            <a
+              href="https://profitfirstanalytics.co.in/signup"
+              class="profirst-btn-primary"
+              >Get Free Profit Audit →</a
+            >
+            <a
+              href="https://calendly.com/shubham-profitfirst/15min"
+              class="profirst-btn-secondary"
+              >Book a Demo</a
+            >
+          </div>
+          <div class="profirst-hero-trust">
+            No credit card required &nbsp;·&nbsp; 14 days free &nbsp;·&nbsp;
+            Takes 10 minutes
+          </div>
+        </div>
+
+        <div class="profirst-rv profirst-d4">
+          <div class="profirst-hero-stats">
+            <div class="profirst-hstat">
+              <div class="profirst-hstat-val profirst-g">₹6.4L</div>
+              <div class="profirst-hstat-lbl">
+                Revenue they thought was profit
+              </div>
+            </div>
+            <div class="profirst-hstat">
+              <div class="profirst-hstat-val profirst-r">2.75×</div>
+              <div class="profirst-hstat-lbl">Real ROAS — below break-even</div>
+            </div>
+            <div class="profirst-hstat">
+              <div class="profirst-hstat-val profirst-y">₹12,308</div>
+              <div class="profirst-hstat-lbl">Actual take-home profit</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+<!-- ══ WHY PROFIT IS FAKE ══ -->
+<section class="profirst-sec" id="profirst-fake">
+  <div class="profirst-fake-glow"></div>
+  <div class="profirst-wrap">
+    <div class="profirst-rv">
+      <div class="profirst-chip">The Problem</div>
+      <h2 class="profirst-h2">The hidden profit <i>killers</i></h2>
+      <p class="profirst-lead">Three things draining your margin silently — every single month.</p>
+    </div>
+    <div class="profirst-fake-grid">
+      <div class="profirst-fake-card profirst-c1 profirst-rv profirst-d1">
+        <div class="profirst-fc-ico">📉</div>
+        <div class="profirst-fc-ttl">ROAS Is Lying</div>
+        <div class="profirst-fc-desc">Meta's ROAS ignores RTO orders, refunds, and COD failures. Your real ROAS could be 30% lower than what the dashboard shows.</div>
+      </div>
+      <div class="profirst-fake-card profirst-c2 profirst-rv profirst-d2">
+        <div class="profirst-fc-ico">🔴</div>
+        <div class="profirst-fc-ttl">COD Is Bleeding You</div>
+        <div class="profirst-fc-desc">Every returned COD order is a negative-margin transaction you chose to run. Most brands just never calculated it that way.</div>
+      </div>
+      <div class="profirst-fake-card profirst-c3 profirst-rv profirst-d3">
+        <div class="profirst-fc-ico">🧩</div>
+        <div class="profirst-fc-ttl">No Single Truth</div>
+        <div class="profirst-fc-desc">Shopify shows gross revenue. Meta shows ad spend. Shiprocket shows shipping. Nobody adds it all up. Until now.</div>
+      </div>
     </div>
   </div>
-</header>
+</section>
 
-<!-- Mobile Menu -->
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#features" onclick="toggleMobileMenu()">Features</a>
-  <a href="#audit" onclick="toggleMobileMenu()">How It Works</a>
-  <a href="#faq" onclick="toggleMobileMenu()">FAQ</a>
-  <a href="https://profitfirstanalytics.co.in/signup" target="_blank" class="btn" onclick="toggleMobileMenu()">Get Free Profit Audit</a>
-</div>
-
-<script>
-function toggleMobileMenu() {
-  const menu = document.getElementById('mobileMenu');
-  const toggle = document.querySelector('.mobile-menu-toggle');
-  menu.classList.toggle('active');
-  toggle.classList.toggle('active');
-}
-
-// Close menu when clicking outside
-document.addEventListener('click', function(event) {
-  const menu = document.getElementById('mobileMenu');
-  const toggle = document.querySelector('.mobile-menu-toggle');
-  const header = document.querySelector('.header');
-  
-  if (!header.contains(event.target) && !menu.contains(event.target)) {
-    menu.classList.remove('active');
-    toggle.classList.remove('active');
-  }
-});
-</script>
-
-<!-- HERO -->
-<section class="hero-section">
-  <div class="blur-circle-top"></div>
-  <div class="container grid-2">
-    <div>
-      <span class="badge">Shopify + Meta Ads + Shiprocket</span>
-      <h1>Most D2C Brands Think They Are Profitable.<br>Most Are Wrong.</h1>
-      
-      <!-- Video for mobile (shown below heading) -->
-      <div style="display: none;" class="mobile-video">
-        <video controls poster="founder-video-thumbnail.jpg" style="margin: 30px 0;">
-          <source src="founder-video.mp4" type="video/mp4">
-        </video>
+<!-- ══ GAP TABLE ══ -->
+<section class="profirst-sec" id="profirst-gap">
+  <div class="profirst-wrap">
+    <div class="profirst-rv">
+      <div class="profirst-chip">The Gap</div>
+      <h2 class="profirst-h2">What you <i>see</i> vs what is <i>real</i></h2>
+      <p class="profirst-lead">Every tool shows a piece of the truth. None show the full picture.</p>
+    </div>
+    <div class="profirst-gap-grid profirst-rv profirst-d1">
+      <div class="profirst-gap-card">
+        <div class="profirst-gap-head profirst-blind">😶 What Shopify / Meta Shows</div>
+        <div class="profirst-gap-rows">
+          <div class="profirst-gap-row-item">
+            <div class="profirst-gi-label">Revenue</div>
+            <div class="profirst-gi-val profirst-r">₹6,47,000</div>
+            <div class="profirst-gi-note">Gross, before any deductions</div>
+          </div>
+          <div class="profirst-gap-row-item">
+            <div class="profirst-gi-label">Meta ROAS</div>
+            <div class="profirst-gi-val profirst-r">3.2×</div>
+            <div class="profirst-gi-note">Includes returned orders</div>
+          </div>
+          <div class="profirst-gap-row-item">
+            <div class="profirst-gi-label">Net Profit</div>
+            <div class="profirst-gi-val profirst-r">?</div>
+            <div class="profirst-gi-note">CA sends it 3 weeks later</div>
+          </div>
+        </div>
       </div>
-      
-      <p><strong>
-        You check  <span class="gradient-text">Shopify</span>   — revenue looks great. You check <span class="gradient-text">Meta</span>   — ROAS looks fine.
-         But at the end of the month, your bank account tells a different story. </strong>
+      <div class="profirst-gap-card">
+        <div class="profirst-gap-head profirst-truth">✅ What Profit First Shows</div>
+        <div class="profirst-gap-rows">
+          <div class="profirst-gap-row-item">
+            <div class="profirst-gi-label">Real Revenue</div>
+            <div class="profirst-gi-val profirst-g">₹6,46,637</div>
+            <div class="profirst-gi-note">Delivered orders only</div>
+          </div>
+          <div class="profirst-gap-row-item">
+            <div class="profirst-gi-label">Real ROAS</div>
+            <div class="profirst-gi-val profirst-g">2.75× ⚠</div>
+            <div class="profirst-gi-note">Below break-even — alert triggered</div>
+          </div>
+          <div class="profirst-gap-row-item">
+            <div class="profirst-gi-label">Net Profit — Today</div>
+            <div class="profirst-gi-val profirst-g">₹12,308</div>
+            <div class="profirst-gi-note">After every single cost</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="profirst-gap-footer profirst-rv profirst-d2">The gap between what you <strong>think you made</strong> and what you <strong>actually made</strong> — that is Profit First.</p>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══ -->
+<section class="profirst-sec" id="profirst-how">
+  <div class="profirst-how-glow"></div>
+  <div class="profirst-wrap">
+    <div class="profirst-rv">
+      <div class="profirst-chip">How It Works</div>
+      <h2 class="profirst-h2">Real profit in <i>10 minutes</i></h2>
+      <p class="profirst-lead">Three steps. No spreadsheets. No CA required.</p>
+    </div>
+    <div class="profirst-steps profirst-rv profirst-d1">
+      <div class="profirst-step profirst-act" data-n="1" onclick="profirstSetStep(1)">
+        <div class="profirst-step-n">1</div>
+        <div>
+          <div class="profirst-step-title">Connect your tools</div>
+          <div class="profirst-step-desc">Shopify, Meta Ads, Shiprocket — one click each. Read-only. We never touch your store or campaigns.</div>
+          <div class="profirst-step-pills"><span class="profirst-spill profirst-s">Shopify</span><span class="profirst-spill profirst-m">Meta Ads</span><span class="profirst-spill profirst-r">Shiprocket</span><span class="profirst-spill profirst-fr">Read-only</span></div>
+        </div>
+      </div>
+      <div class="profirst-step" data-n="2" onclick="profirstSetStep(2)">
+        <div class="profirst-step-n">2</div>
+        <div>
+          <div class="profirst-step-title">We do all the math</div>
+          <div class="profirst-step-desc">Every order, every ad rupee, every return, every fee — calculated automatically. Updated daily.</div>
+          <div class="profirst-step-pills"><span class="profirst-spill profirst-fr">Auto-syncs daily</span></div>
+        </div>
+      </div>
+      <div class="profirst-step" data-n="3" onclick="profirstSetStep(3)">
+        <div class="profirst-step-n">3</div>
+        <div>
+          <div class="profirst-step-title">Make better decisions</div>
+          <div class="profirst-step-desc">See what's leaking. Get ROAS alerts. Know your profit every morning before spending another rupee on ads.</div>
+          <div class="profirst-step-pills"><span class="profirst-spill profirst-fr">Real-time alerts</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="profirst-panel-wrap profirst-rv profirst-d2">
+      <div class="profirst-panel profirst-show" id="profirst-p1">
+        <div class="profirst-pb"><div class="profirst-pdots"><div class="profirst-pdot" style="background:#ff5f57"></div><div class="profirst-pdot" style="background:#ffbd2e"></div><div class="profirst-pdot" style="background:#28ca42"></div></div><div class="profirst-pb-title">Connect Your Store</div></div>
+        <div class="profirst-pbody">
+          <div class="profirst-conn-list">
+            <div class="profirst-conn-item"><div class="profirst-conn-l"><div class="profirst-conn-ico profirst-sh">🛍️</div><div><div class="profirst-conn-name">Shopify</div><div class="profirst-conn-sub">Orders, revenue, products</div></div></div><button class="profirst-conn-btn profirst-ok">✓ Connected</button></div>
+            <div class="profirst-conn-item"><div class="profirst-conn-l"><div class="profirst-conn-ico profirst-mt">📣</div><div><div class="profirst-conn-name">Meta Ads</div><div class="profirst-conn-sub">Ad spend, ROAS, campaigns</div></div></div><button class="profirst-conn-btn profirst-ok">✓ Connected</button></div>
+            <div class="profirst-conn-item"><div class="profirst-conn-l"><div class="profirst-conn-ico profirst-sr">🚚</div><div><div class="profirst-conn-name">Shiprocket</div><div class="profirst-conn-sub">Shipping, RTO, COD</div></div></div><button class="profirst-conn-btn profirst-go">Connect →</button></div>
+          </div>
+          <div class="profirst-conn-time">⏱ Average setup: <strong style="color:var(--profirst-g)">8 minutes</strong></div>
+        </div>
+      </div>
+      <div class="profirst-panel" id="profirst-p2">
+        <div class="profirst-pb"><div class="profirst-pdots"><div class="profirst-pdot" style="background:#ff5f57"></div><div class="profirst-pdot" style="background:#ffbd2e"></div><div class="profirst-pdot" style="background:#28ca42"></div></div><div class="profirst-pb-title">Your Profit — Calculated</div></div>
+        <div class="profirst-pbody">
+          <div class="profirst-calc-list">
+            <div class="profirst-calc-r"><div class="profirst-calc-lbl"><div class="profirst-calc-dot" style="background:var(--profirst-g)"></div>Gross Revenue</div><div class="profirst-calc-v profirst-g">+₹6,47,667</div></div>
+            <div class="profirst-calc-div"></div>
+            <div class="profirst-calc-r"><div class="profirst-calc-lbl"><div class="profirst-calc-dot" style="background:var(--profirst-r)"></div>Ad Spend</div><div class="profirst-calc-v profirst-r">−₹2,35,236</div></div>
+            <div class="profirst-calc-r"><div class="profirst-calc-lbl"><div class="profirst-calc-dot" style="background:var(--profirst-r)"></div>COGS</div><div class="profirst-calc-v profirst-r">−₹1,91,626</div></div>
+            <div class="profirst-calc-r"><div class="profirst-calc-lbl"><div class="profirst-calc-dot" style="background:var(--profirst-r)"></div>Shipping + RTO</div><div class="profirst-calc-v profirst-r">−₹24,257</div></div>
+            <div class="profirst-calc-r"><div class="profirst-calc-lbl"><div class="profirst-calc-dot" style="background:var(--profirst-r)"></div>Gateway + Fixed</div><div class="profirst-calc-v profirst-r">−₹1,68,240</div></div>
+            <div class="profirst-calc-result"><div class="profirst-cr-lbl">Your Real Net Profit</div><div class="profirst-cr-val">₹12,308</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="profirst-panel" id="profirst-p3">
+        <div class="profirst-pb"><div class="profirst-pdots"><div class="profirst-pdot" style="background:#ff5f57"></div><div class="profirst-pdot" style="background:#ffbd2e"></div><div class="profirst-pdot" style="background:#28ca42"></div></div><div class="profirst-pb-title">Today's Insights</div></div>
+        <div class="profirst-pbody">
+          <div class="profirst-ins-list">
+            <div class="profirst-ins-card profirst-al"><div class="profirst-ins-ico">🚨</div><div><div class="profirst-ins-ttl">ROAS below break-even</div><div class="profirst-ins-dsc">2.75 vs 3.54 needed. Every ₹100 in ads is losing ₹22.</div></div></div>
+            <div class="profirst-ins-card"><div class="profirst-ins-ico">📦</div><div><div class="profirst-ins-ttl">Top product: ₹58,228 profit</div><div class="profirst-ins-dsc">2 QR Frosted Standee. Scale this one's budget.</div></div></div>
+            <div class="profirst-ins-card"><div class="profirst-ins-ico">💸</div><div><div class="profirst-ins-ttl">RTO loss: ₹14,092 this month</div><div class="profirst-ins-dsc">11 returns. Push prepaid to recover this.</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BEFORE AFTER ══ -->
+<section class="profirst-sec" id="profirst-ba">
+  <div class="profirst-wrap">
+    <div class="profirst-rv">
+      <div class="profirst-chip">The Difference</div>
+      <h2 class="profirst-h2">Running blind vs running <i>with clarity</i></h2>
+      <p class="profirst-lead">What changes when you finally see the real numbers every day.</p>
+    </div>
+    <div class="profirst-ba-wrap profirst-rv profirst-d1">
+      <div class="profirst-ba-col">
+        <div class="profirst-ba-hd"><div class="profirst-ba-hd-ico profirst-b">😰</div><div><div class="profirst-ba-hd-ttl profirst-b">Before Profit First</div><div class="profirst-ba-hd-sub">Guesses and gut feel</div></div></div>
+        <div class="profirst-ba-list">
+          <div class="profirst-ba-item"><div class="profirst-ba-emoji">📱</div><div class="profirst-ba-txt profirst-pain"><strong>4 dashboards every morning</strong> — still don't know real profit</div></div>
+          <div class="profirst-ba-item"><div class="profirst-ba-emoji">🎭</div><div class="profirst-ba-txt profirst-pain"><strong>Meta ROAS looks fine</strong> but bank balance doesn't match</div></div>
+          <div class="profirst-ba-item"><div class="profirst-ba-emoji">❓</div><div class="profirst-ba-txt profirst-pain"><strong>No idea which product</strong> actually makes money</div></div>
+          <div class="profirst-ba-item"><div class="profirst-ba-emoji">🗓️</div><div class="profirst-ba-txt profirst-pain"><strong>CA sends P&L</strong> 3–4 weeks after month ends</div></div>
+        </div>
+      </div>
+      <div class="profirst-vs-pill"><div class="profirst-vs-inner">VS</div></div>
+      <div class="profirst-ba-col profirst-af">
+        <div class="profirst-ba-hd"><div class="profirst-ba-hd-ico profirst-a">🚀</div><div><div class="profirst-ba-hd-ttl profirst-a">After Profit First</div><div class="profirst-ba-hd-sub">Every number clear, every day</div></div></div>
+        <div class="profirst-ba-list">
+          <div class="profirst-ba-item"><div class="profirst-ba-emoji">🎯</div><div class="profirst-ba-txt profirst-gain"><strong>One dashboard.</strong> Real revenue, ROAS, profit — auto-pulled daily</div></div>
+          <div class="profirst-ba-item"><div class="profirst-ba-emoji">📊</div><div class="profirst-ba-txt profirst-gain"><strong>Real ROAS alert</strong> the moment it drops below break-even</div></div>
+          <div class="profirst-ba-item"><div class="profirst-ba-emoji">💰</div><div class="profirst-ba-txt profirst-gain"><strong>Product-level profit</strong> — know which SKU to scale and which to kill</div></div>
+          <div class="profirst-ba-item"><div class="profirst-ba-emoji">⚡</div><div class="profirst-ba-txt profirst-gain"><strong>Daily P&L updated</strong> automatically. Fix problems in real time</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEATURES ══ -->
+<section class="profirst-sec" id="profirst-features">
+  <div class="profirst-wrap">
+    <div class="profirst-rv">
+      <div class="profirst-chip">Features</div>
+      <h2 class="profirst-h2">Everything in <i>one place</i></h2>
+      <p class="profirst-lead">Built specifically for Indian D2C brands. Not a generic analytics tool.</p>
+    </div>
+    <div class="profirst-feat-grid">
+      <div class="profirst-feat-card profirst-rv profirst-d1"><div class="profirst-feat-ico">💰</div><div class="profirst-feat-ttl">Real Net Profit</div><div class="profirst-feat-desc">After ads, shipping, COD returns, and gateway fees. The number your CA calculates — updated every day automatically.</div></div>
+      <div class="profirst-feat-card profirst-rv profirst-d2"><div class="profirst-feat-ico">🔍</div><div class="profirst-feat-ttl">Profit Leak Detection</div><div class="profirst-feat-desc">See exactly where money is leaking — RTO costs, gateway cuts, shipping overruns. Caught and quantified daily.</div></div>
+      <div class="profirst-feat-card profirst-rv profirst-d3"><div class="profirst-feat-ico">🤖</div><div class="profirst-feat-ttl">AI Business Assistant</div><div class="profirst-feat-desc">Ask any question about your store data. Get answers in plain language. No dashboards to dig through.</div></div>
+      <div class="profirst-feat-card profirst-rv profirst-d1"><div class="profirst-feat-ico">📦</div><div class="profirst-feat-ttl">Product-Level Profit</div><div class="profirst-feat-desc">See gross profit per SKU. Know which product to scale and which one is quietly eating your margin.</div></div>
+      <div class="profirst-feat-card profirst-rv profirst-d2"><div class="profirst-feat-ico">📈</div><div class="profirst-feat-ttl">Growth Prediction <span style="font-size:10px;color:var(--profirst-y);background:var(--profirst-yd);padding:2px 7px;border-radius:5px;margin-left:4px;font-weight:600;">Soon</span></div><div class="profirst-feat-desc">See what the next 30 days look like. Optimize spend, reduce costs, and know the exact impact before you act.</div></div>
+      <div class="profirst-feat-card profirst-rv profirst-d3"><div class="profirst-feat-ico">🎯</div><div class="profirst-feat-ttl">AI Meta Ads <span style="font-size:10px;color:var(--profirst-y);background:var(--profirst-yd);padding:2px 7px;border-radius:5px;margin-left:4px;font-weight:600;">Soon</span></div><div class="profirst-feat-desc">Launch campaigns optimized for real profit — not just conversions. Run for better ROAS, fewer RTOs, more prepaid orders.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ AUDIT ══ -->
+<section class="profirst-sec" id="profirst-audit">
+  <div class="profirst-audit-gl1"></div>
+  <div class="profirst-audit-gl2"></div>
+  <div class="profirst-wrap">
+    <div class="profirst-rv">
+      <div class="profirst-chip">Free Profit Audit</div>
+      <h2 class="profirst-h2">See your <i>real number</i> in 10 minutes</h2>
+      <p class="profirst-lead">The number Shopify and Meta are hiding from you.</p>
+    </div>
+    <div class="profirst-audit-grid">
+      <div class="profirst-ck-list profirst-rv profirst-d1">
+        <div class="profirst-ck-item"><div class="profirst-ck-icon">✓</div><div><div class="profirst-ck-ttl">Your real net profit</div><div class="profirst-ck-dsc">After every ad rupee, shipping charge, and gateway fee — not Shopify's number</div></div></div>
+        <div class="profirst-ck-item"><div class="profirst-ck-icon">✓</div><div><div class="profirst-ck-ttl">Your biggest margin killer</div><div class="profirst-ck-dsc">Which SKU is costing you more than it earns</div></div></div>
+        <div class="profirst-ck-item"><div class="profirst-ck-icon">✓</div><div><div class="profirst-ck-ttl">What Meta's ROAS hides</div><div class="profirst-ck-dsc">Real ROAS after RTO returns and COD failures</div></div></div>
+        <div class="profirst-ck-item"><div class="profirst-ck-icon">✓</div><div><div class="profirst-ck-ttl">Your RTO cost — exactly</div><div class="profirst-ck-dsc">Most brands are shocked when they see this number</div></div></div>
+      </div>
+      <div class="profirst-cta-card profirst-rv profirst-d2">
+        <div class="profirst-cta-badge">⏱ Takes 10 minutes</div>
+        <div class="profirst-cta-ttl">Get your free<br><i>Profit Leak Audit</i></div>
+        <div class="profirst-cta-sub">Connect your store. We calculate everything. See the number that surprises most founders.</div>
+        <a href="https://profitfirstanalytics.co.in/signup" class="profirst-cta-btn">Get My Free Audit →</a>
+        <div class="profirst-cta-trust"><span>No credit card</span> · <span>14 days free</span> · <span>Read-only</span></div>
+        <div class="profirst-spots">
+          <div class="profirst-spots-row"><span>Founding member spots</span><span class="profirst-tk">147 / 200 taken</span></div>
+          <div class="profirst-spots-bar-bg"><div class="profirst-spots-fill"></div></div>
+          <div class="profirst-spots-row"><span style="color:var(--profirst-g);font-size:11px;">53 spots left — ₹4,999/mo locked forever</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRICING ══ -->
+<section class="profirst-sec" id="profirst-pricing">
+  <div class="profirst-wrap">
+    <div class="profirst-rv">
+      <div class="profirst-chip">Pricing</div>
+      <h2 class="profirst-h2">Simple, <i>honest</i> pricing</h2>
+      <p class="profirst-lead">For D2C brands spending ₹1L+ on ads every month. Pays for itself in the first week.</p>
+    </div>
+    <div class="profirst-price-grid">
+      <div class="profirst-price-card profirst-rv profirst-d1">
+        <div class="profirst-price-plan">Starter</div>
+        <div class="profirst-price-amt">₹2,999<span>/mo</span></div>
+        <div class="profirst-price-period">Billed monthly</div>
+        <div class="profirst-price-trial">14 days free trial</div>
+        <div class="profirst-price-desc">For brands doing ₹2L–₹10L monthly revenue who want to see their real numbers for the first time.</div>
+        <div class="profirst-price-features">
+          <div class="profirst-pf-item">Full profit dashboard</div>
+          <div class="profirst-pf-item">Shopify + Meta + Shiprocket</div>
+          <div class="profirst-pf-item">Product profitability table</div>
+          <div class="profirst-pf-item">Cost leakage tracking</div>
+          <div class="profirst-pf-item">AI assistant</div>
+        </div>
+        <a href="https://profitfirstanalytics.co.in/signup" class="profirst-price-btn profirst-secondary">Start Free Trial</a>
+      </div>
+      <div class="profirst-price-card profirst-popular profirst-rv profirst-d2">
+        <div class="profirst-popular-badge">Most Popular</div>
+        <div class="profirst-price-plan">Growth</div>
+        <div class="profirst-price-amt">₹4,999<span>/mo</span></div>
+        <div class="profirst-price-period">Billed monthly</div>
+        <div class="profirst-price-trial">14 days free trial</div>
+        <div class="profirst-price-desc">For brands spending ₹1L+ on Meta ads who need real-time ROAS tracking and profit alerts.</div>
+        <div class="profirst-price-features">
+          <div class="profirst-pf-item">Everything in Starter</div>
+          <div class="profirst-pf-item">Real-time ROAS alerts</div>
+          <div class="profirst-pf-item">Daily P&L chart</div>
+          <div class="profirst-pf-item">AI COD confirmation agent</div>
+          <div class="profirst-pf-item profirst-soon">Growth Prediction Engine</div>
+          <div class="profirst-pf-item profirst-soon">AI Meta Ads</div>
+        </div>
+        <a href="https://profitfirstanalytics.co.in/signup" class="profirst-price-btn profirst-primary">Start Free Trial</a>
+      </div>
+    </div>
+    <p class="profirst-price-note profirst-rv profirst-d3"><strong>Founding member offer:</strong> First 200 brands get Growth plan pricing locked forever. 147 spots taken.</p>
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section class="profirst-sec" id="profirst-faq">
+  <div class="profirst-wrap">
+    <div class="profirst-rv">
+      <div class="profirst-chip">FAQ</div>
+      <h2 class="profirst-h2">Questions <i>answered</i></h2>
+    </div>
+    <div class="profirst-faq-list profirst-rv profirst-d1">
+      <div class="profirst-faq-item">
+        <div class="profirst-faq-q" onclick="profirstToggleFaq(this)">Is Profit First only for Shiprocket users? <span class="profirst-faq-arrow">▾</span></div>
+        <div class="profirst-faq-a">We currently integrate deeply with Shiprocket, which covers the majority of Indian D2C brands. Delhivery, Blue Dart, and Xpressbees integrations are coming in Q3 2026. Not on Shiprocket? You can still connect Shopify and Meta — shipping accuracy improves once your courier is added.</div>
+      </div>
+      <div class="profirst-faq-item">
+        <div class="profirst-faq-q" onclick="profirstToggleFaq(this)">How is this different from Shopify or Meta dashboards? <span class="profirst-faq-arrow">▾</span></div>
+        <div class="profirst-faq-a">Shopify shows gross revenue. Meta shows ad spend. They never talk to each other. Profit First pulls all three — Shopify, Meta, and Shiprocket — and calculates your actual net profit after every cost, updated daily.</div>
+      </div>
+      <div class="profirst-faq-item">
+        <div class="profirst-faq-q" onclick="profirstToggleFaq(this)">How long does setup take? <span class="profirst-faq-arrow">▾</span></div>
+        <div class="profirst-faq-a">Most brands are fully connected and seeing their real profit within 10 minutes. Shopify connects in 2 clicks. Meta and Shiprocket take about 3 minutes each.</div>
+      </div>
+      <div class="profirst-faq-item">
+        <div class="profirst-faq-q" onclick="profirstToggleFaq(this)">My CA already sends me a P&L. Why do I need this? <span class="profirst-faq-arrow">▾</span></div>
+        <div class="profirst-faq-a">Your CA's P&L comes 3–4 weeks after the month ends. By then you've already run another month of ads at the wrong ROAS. Profit First updates daily — so you can fix problems while there's still time to act.</div>
+      </div>
+      <div class="profirst-faq-item">
+        <div class="profirst-faq-q" onclick="profirstToggleFaq(this)">Will this change my ads automatically? <span class="profirst-faq-arrow">▾</span></div>
+        <div class="profirst-faq-a">Not today. Right now Profit First shows you exactly what to fix and why — with clear ROAS alerts, ad spend analysis, and product-level data. AI-powered ad execution is launching for Growth plan users in Q3 2026.</div>
+      </div>
+      <div class="profirst-faq-item">
+        <div class="profirst-faq-q" onclick="profirstToggleFaq(this)">Is my store data safe? <span class="profirst-faq-arrow">▾</span></div>
+        <div class="profirst-faq-a">Yes. We use read-only access only. We never modify your store, orders, or ad accounts. Your data is never sold or shared.</div>
+      </div>
+      <div class="profirst-faq-item">
+        <div class="profirst-faq-q" onclick="profirstToggleFaq(this)">Can I cancel anytime? <span class="profirst-faq-arrow">▾</span></div>
+        <div class="profirst-faq-a">Yes. Monthly plans, no lock-in. Cancel anytime from your dashboard. No questions asked.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FINAL CTA ══ -->
+<section class="profirst-sec" id="profirst-final">
+  <div class="profirst-final-glow"></div>
+  <div class="profirst-wrap">
+    <div class="profirst-final-inner profirst-rv">
+      <h2 class="profirst-final-h">You probably made less profit<br>last month than you <i>think.</i></h2>
+      <p class="profirst-final-sub">Find out the real number — free, in 10 minutes. No credit card. No spreadsheets. Just clarity.</p>
+      <div class="profirst-final-btns">
+        <a href="https://profitfirstanalytics.co.in/signup" class="profirst-btn-primary">Get My Free Profit Audit →</a>
+        <a href="https://calendly.com/shubham-profitfirst/15min" class="profirst-btn-secondary">Book a Demo</a>
+      </div>
+      <div class="profirst-final-trust">No credit card required &nbsp;·&nbsp; 14 days free &nbsp;·&nbsp; Connect Shopify, Meta, Shiprocket</div>
+    </div>
+  </div>
+</section>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <img src="logo.png" alt="Profit First" class="footer-logo" />
+      <p style="margin-top: 16px; font-size: 14px">
+        2025 Profit First Analytics. All rights reserved.
       </p>
-      <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
-        <p style="margin: 0;"><strong>Profit First shows you exactly where your money is going — in real time.</strong></p>
-        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-          <a href="https://profitfirstanalytics.co.in/signup" target="_blank" class="btn" style="margin-top: 0;">Get Free Profit Audit</a>
-          <a href="https://calendly.com/shubham-profitfirst/15min/2026-05-12T16:45:00+05:30p" target="_blank" class="btn" style="margin-top: 0;">Book a Demo</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- FOUNDER VIDEO SLOT (desktop only) -->
-    <div class="desktop-video">
-      <video controls poster="founder-video-thumbnail.jpg">
-        <source src="founder-video.mp4" type="video/mp4">
-      </video>
-    </div>
-  </div>
-</section>
-
-<!-- INFOGRAPHIC 1 -->
-<section class="section-light">
-  <div class="container">
-    <h2 style="margin-top: -20px;">Why Your "<span class="gradient-text">Profit</span>" Is Fake</h2>
-    <p style="text-align: center; max-width: 672px; margin: 0 auto 30px; font-size: 18px;">Most brands stop at Shopify revenue. That's the mistake.</p>
-    <img src="profit-banner.jpg" alt="Why Your Profit Is Fake" style="max-width: 750px; width: 100%; height: auto; margin: 0 auto; display: block; border-radius: 12px;">
-  </div>
-</section>
-
-<!-- PAIN -->
-<section style="position: relative; overflow: hidden;">
-  <div class="container">
-    <h2>The Hidden <span class="gradient-text">Profit Killers</span></h2>
-    <div class="grid-3">
-      <div class="card">
-        <h3><span class="gradient-text">ROAS Is Lying</span> </h3>
-        <p>Meta's ROAS ignores RTO orders, refunds, and COD failures. Your real ROAS could be 30% lower than what the dashboard shows.</p>
-      </div>
-      <div class="card">
-        <h3><span class="gradient-text">COD Is Bleeding You</span> </h3>
-        <p>You're not just losing the sale when a COD order returns. You're paying for the shipping twice and losing the product margin — silently, every single day.</p>
-      </div>
-      <div class="card">
-        <h3><span class="gradient-text">No Single Truth</span> </h3>
-        <p>Shopify shows gross revenue. Meta shows ad spend. Shiprocket shows shipping. Nobody adds it all up. Until now.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- WHAT IT DOES -->
-<section id="features" class="section-light">
-  <div class="container">
-    <h2>What <span class="gradient-text">Profit First</span> Actually Does</h2>
-    <div class="grid-3">
-      <div class="card">
-        <h3>Real Net <span class="gradient-text">Profit</span></h3>
-        <p>After ads, shipping, COD returns, and gateways.</p>
-      </div>
-      <div class="card">
-        <h3><span class="gradient-text">Profit Leak</span> Detection</h3>
-        <p>See exactly where money is leaking.</p>
-      </div>
-      <div class="card">
-        <h3>AI Business Assistant</h3>
-        <p>Ask questions. Get answers from your own data.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- INFOGRAPHIC 2 -->
-<section>
-  <div class="container">
-    <h2>Before vs After <span class="gradient-text">Profit First</span></h2>
-    <img src="profitfirstanalytics Banner 2.jpg.jpeg" alt="Before vs After Profit First" style="max-width: 750px; width: 100%; height: auto; margin: 0 auto; display: block; border-radius: 12px;">
-  </div>
-</section>
-
-<!-- PRICING -->
-<section id="audit" class="section-light">
-  <div class="container">
-    <h2>Start With a <span class="gradient-text">Profit Leak Audit</span></h2>
-    <p style=" max-width: 672px; margin: 0 auto 40px;">In under 10 minutes, we show:</p>
-    
-    <div style="max-width: 700px; margin: 0 auto;">
-      <!-- Single Box with Ticks -->
-      <div class="card" style="background: #161616; flex: 1;">
-        <div style="display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px;">
-          <span style="color: #13ef96; font-size: 32px; font-weight: 900; line-height: 1.2; min-width: 32px;">✓</span>
-          <h3 style="margin: 0;">Are you actually <span class="gradient-text">profitable</span>?</h3>
-        </div>
-        <div style="display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px;">
-          <span style="color: #13ef96; font-size: 32px; font-weight: 900; line-height: 1.2; min-width: 32px;">✓</span>
-          <h3 style="margin: 0;">Which SKUs lose money?</h3>
-        </div>
-        <div style="display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px;">
-          <span style="color: #13ef96; font-size: 32px; font-weight: 900; line-height: 1.2; min-width: 32px;">✓</span>
-          <h3 style="margin: 0;">How much ads & COD are costing you?</h3>
-        </div>
-        <div style="display: flex; align-items: flex-start; gap: 16px;">
-          <span style="color: #13ef96; font-size: 32px; font-weight: 900; line-height: 1.2; min-width: 32px;">✓</span>
-          <h3 style="margin: 0;">Clear Data, Clear ROAS, Healthy Cash Flow, Predictable Profit</h3>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Pricing Section -->
-    <h2 style="text-align: center; margin-top: 60px; margin-bottom: 20px;">Our <span class="gradient-text">Pricing</span></h2>
-    
-    <!-- Pricing Cards -->
-    <div class="pricing-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 900px; margin: 40px auto;">
-      
-      <!-- Pro Plan -->
-      <div class="card" style="background: linear-gradient(135deg, #083b2a, #082209); border-radius: 16px; position: relative; box-shadow: 0 0 30px rgba(19, 239, 150, 0.3);">
-        <h3 style="color: #13ef96; margin-bottom: 20px; text-decoration: underline; text-align: center;">Pro</h3>
-        <div style="text-align: center; margin-bottom: 30px;">
-          <p style="font-size: 48px; font-weight: 700; color: #ffffff; margin: 0; line-height: 1;">Rs. 4,999<span style="font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.7);">/mo</span></p>
-          <p style="font-size: 14px; color: #13ef96; margin-top: 10px;">Advanced tools for growing teams.</p>
-        </div>
-        
-        <!-- CTA Button -->
-        <div style="text-align: center; margin-bottom: 30px;">
-          <a href="https://profitfirstanalytics.co.in/signup" target="_blank" style="background: #13ef96; color: #000000; padding: 12px 40px; font-weight: 600; border-radius: 8px; text-decoration: none; display: inline-block; font-size: 16px;">Start Free Trial</a>
-          <p style="font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 8px;">Billed monthly.</p>
-          <p style="font-size: 12px; color: #13ef96; margin-top: 4px;">14 days free trial</p>
-        </div>
-        
-        <div style="margin-top: 30px;">
-          <p style="color: #13ef96; font-weight: 600; margin-bottom: 20px; font-size: 14px;">All Pro plan features, plus</p>
-          <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;">
-            <span style="color: #13ef96; font-size: 16px; font-weight: 900; flex-shrink: 0;">✓</span>
-            <p style="margin: 0; font-size: 14px; color: #ffffff; text-align: left;">Profit Loss Dashboard</p>
-          </div>
-          <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;">
-            <span style="color: #13ef96; font-size: 16px; font-weight: 900; flex-shrink: 0;">✓</span>
-            <p style="margin: 0; font-size: 14px; color: #ffffff; text-align: left;">AI Assistant</p>
-          </div>
-          <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;">
-            <span style="color: #13ef96; font-size: 16px; font-weight: 900; flex-shrink: 0;">✓</span>
-            <p style="margin: 0; font-size: 14px; color: #ffffff; text-align: left;">Growth Prediction</p>
-          </div>
-          <div style="display: flex; align-items: flex-start; gap: 12px;">
-            <span style="color: #13ef96; font-size: 16px; font-weight: 900; flex-shrink: 0;">✓</span>
-            <p style="margin: 0; font-size: 14px; color: #ffffff; text-align: left;">Email Support</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Enterprise Plan -->
-      <div class="card" style="background: linear-gradient(135deg, #083b2a, #082209); border-radius: 16px;">
-        <h3 style="color: #13ef96; margin-bottom: 20px; text-decoration: underline; text-align: center;">Enterprise</h3>
-        <div style="text-align: center; margin-bottom: 30px;">
-          <p style="font-size: 48px; font-weight: 700; color: #ffffff; margin: 0; line-height: 1;">Rs. 29,999<span style="font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.7);">/mo</span></p>
-          <p style="font-size: 14px; color: #13ef96; margin-top: 10px;">Complete collaboration for larger teams.</p>
-        </div>
-        
-        <!-- CTA Button -->
-        <div style="text-align: center; margin-bottom: 30px;">
-          <a href="https://profitfirstanalytics.co.in/signup" target="_blank" style="background: #13ef96; color: #000000; padding: 12px 40px; font-weight: 600; border-radius: 8px; text-decoration: none; display: inline-block; font-size: 16px;">Start Free Trial</a>
-          <p style="font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 8px;">Billed monthly.</p>
-        </div>
-        
-        <div style="margin-top: 30px;">
-          <p style="color: #ffffff; font-weight: 600; margin-bottom: 20px; font-size: 14px;">All Pro plan features, plus</p>
-          <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;">
-            <span style="color: #13ef96; font-size: 16px; font-weight: 900; flex-shrink: 0;">✓</span>
-            <p style="margin: 0; font-size: 14px; color: #ffffff; text-align: left;">Everything in Pro plan</p>
-          </div>
-          <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;">
-            <span style="color: #13ef96; font-size: 16px; font-weight: 900; flex-shrink: 0;">✓</span>
-            <p style="margin: 0; font-size: 14px; color: #ffffff; text-align: left;">AI calling agent to confirm COD orders</p>
-          </div>
-          <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;">
-            <span style="color: #13ef96; font-size: 16px; font-weight: 900; flex-shrink: 0;">✓</span>
-            <p style="margin: 0; font-size: 14px; color: #ffffff; text-align: left;">AI calling agent to recover Abandoned carts</p>
-          </div>
-          <div style="display: flex; align-items: flex-start; gap: 12px;">
-            <span style="color: #13ef96; font-size: 16px; font-weight: 900; flex-shrink: 0;">✓</span>
-            <p style="margin: 0; font-size: 14px; color: #ffffff; text-align: left;">AI Meta Ads</p>
-          </div>
-        </div>
-      </div>
-      
-    </div>
-    
-    <div style="text-align: center; margin-top: 40px;">
-      <a href="https://profitfirstanalytics.co.in/signup" target="_blank" class="btn">Book My Audit</a>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section id="faq">
-  <div class="container">
-    <h2>Frequently Asked <span class="gradient-text">Questions</span></h2>
-
-    <div class="faq-wrapper">
-      <details>
-        <summary>Is Profit First only for Shiprocket users?</summary>
-        <p>Yes. Today we integrate deeply with Shiprocket to give accurate COD, RTO, and shipping costs.</p>
-      </details>
-
-      <details>
-        <summary>How is this different from Shopify or Meta dashboards?</summary>
-        <p>They show partial data. Profit First shows real net profit after all costs.</p>
-      </details>
-
-      <details>
-        <summary>Will this change my ads automatically?</summary>
-        <p>No. Today we show what to fix and why. AI execution is rolling out to Scale users.</p>
-      </details>
-
-      <details>
-        <summary>Is my data safe?</summary>
-        <p>Yes. Read-only access. We never modify your store or ad accounts.</p>
-      </details>
-
-      <details>
-        <summary>Can I cancel anytime?</summary>
-        <p>Yes. Monthly plans. No lock-in.</p>
-      </details>
-    </div>
-
-  </div>
-</section>
-
-<!-- FINAL CTA -->
-<section class="section-light">
-  <div class="container" style="text-align: center;">
-    <h2>Stop Guessing. Start Running a <span class="gradient-text">Profitable</span> Brand.</h2>
-    <a href="https://profitfirstanalytics.co.in/signup" target="_blank" class="btn">Get My Profit Leak Audit</a>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="footer">
-  <img src="logo.png" alt="Profit First" class="footer-logo">
-  <p style="margin-top: 16px; font-size: 14px;"> 2025 Profit First Analytics. All rights reserved.</p>
-  <p style="margin-top: 8px; font-size: 14px;">Know how much you <span class="gradient-text">spent</span> & how much <span class="gradient-text">profit</span> you'll make</p>
-</footer>
-
-</body>
+      <p style="margin-top: 8px; font-size: 14px">
+        Know how much you <span class="gradient-text">spent</span> & how much
+        <span class="gradient-text">profit</span> you'll make
+      </p>
+    </footer>
+  </body>
 </html>
